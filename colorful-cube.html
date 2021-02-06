@@ -1,0 +1,54 @@
+<html>
+    
+<body>
+    
+    
+<canvas id="glcanvas" width="512" height="512">
+   <!-- The following message is displayed if the browser doesn’t
+     -- support HTML5 -->
+      Sorry; your web browser does not support HTML5’s canvas element.
+</canvas>
+
+<select id="mymenu" size="6">
+<option value="0">X-Rotate clockwise</option>
+<option value="1">X-Rotate counter-clockwise</option>
+<option value="2">Y-Rotate clockwise</option>
+<option value="3">Y-Rotate counter-clockwise</option>
+<option value="4">Z-Rotate clockwise</option>
+<option value="5">Z-Rotate counter-clockwise</option>
+</select>
+    
+</body>
+
+<script id="vertex-shader" type="x-shader/x-vertex">
+   attribute vec4 vPosition;
+   attribute vec4 vColor;
+   varying vec4 fColor;
+   uniform mat4 vMVmatrix;
+   
+   uniform mat4 modelViewMatrix;
+   uniform mat4 projectionMatrix;
+   
+   void main(){
+        fColor=vColor;
+        
+        gl_Position = projectionMatrix * modelViewMatrix*vMVmatrix * vPosition;
+        
+   }
+</script>
+
+<script id="fragment-shader" type="x-shader/x-fragment"> 
+   precision mediump float;
+   varying vec4 fColor;
+   
+   void main() {
+      gl_FragColor = fColor;
+   }
+</script>
+
+<script src="../Common/initShaders.js"></script>
+<script src="../Common/MV.js"></script>
+<script src="../Common/webgl-utils.js"></script>
+<script src="colorful-cube.js"></script>
+
+</html>
