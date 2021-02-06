@@ -1,4 +1,15 @@
 # Computer-Graphics-with-WebGL---Sample-Projects
-2D and 3D Transformations, Lighting, Texture Properties, and more...
 
-![](Ekran Resmi 2021-02-06 18.30.18.png)
+![alt text](ice1.png)
+
+![alt text](ice2.png)
+
+![alt text](ballerina.png)
+
+![alt text](box.png)
+
+![alt text](col-box.png)
+
+![alt text](cornell.png)
+
+![alt text](ship.png)
