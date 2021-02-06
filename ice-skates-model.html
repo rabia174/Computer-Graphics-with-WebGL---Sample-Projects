@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+
+<div class="inline">
+<p style="font-family:georgia;">Figure Skates Model, F.Rabia Yapicioglu</p>
+<p style="font-family:georgia;">Press Auto-Turn Buttons to make it move</p>
+<p style="font-family:georgia;">Press Stop Buttons to make it stop</p>
+</div>
+ 
+<div>
+<button id="AButton"> Auto Turn Around Y</button>
+<button id="SButton"> Stop Turning Around Y</button>   
+</div>
+    
+
+<button id="A2Button"> Auto Turn Around X</button>
+<button id="S2Button"> Stop Turning Around X</button>   
+
+<div>
+<button id="A3Button"> Auto Turn Around Z</button>
+<button id="S3Button"> Stop Turning Around Z</button>   
+
+</div>
+    
+<pre>
+<select id="mymenu" size="6">
+<option value="0">Make bigger</option>
+<option value="1">Make smaller</option>
+<option value="2">Move Down</option>
+<option value="3">Move Up</option>
+<option value="4">Move Right</option>
+<option value="5">Move Left</option>
+</select>
+ </pre>
+
+<script id="vertex-shader" type="x-shader/x-vertex">
+attribute vec4 vPosition;
+attribute vec4 vNormal;
+attribute vec2 vTexCoords;
+
+uniform mat4 projectionMatrix;
+uniform vec4 lightPosition;
+uniform mat3 normalMatrix;
+varying vec3 N, L, E;
+varying vec2 fTexCoords;
+
+uniform mat4 modelViewMatrix;
+
+
+void main()
+{
+
+    vec3 light;
+    fTexCoords = 4.5*vTexCoords;
+    
+    vec3 pos = (modelViewMatrix * vPosition).xyz;
+    if(lightPosition.z == 0.0)  L = normalize(lightPosition.xyz);
+    else  L = normalize(lightPosition).xyz - pos;
+    
+    E =  -normalize(pos);
+    N = normalize( normalMatrix*vNormal.xyz);
+    gl_Position = projectionMatrix * modelViewMatrix * vPosition;
+    
+}
+  
+</script>
+
+<script id="fragment-shader" type="x-shader/x-fragment">
+
+precision mediump float;
+
+varying vec2 fTexCoords;
+varying vec3 N, L, E;
+
+
+uniform vec4 ambientProduct;
+uniform vec4 diffuseProduct;
+uniform vec4 specularProduct;
+uniform float shininess;
+
+uniform sampler2D texMap;
+void main()
+{    
+    vec4 fColor;
+    
+    vec3 H = normalize( L + E );
+    vec4 ambient = ambientProduct;
+
+    float Kd = max( dot(L, N), 0.0 );
+    vec4  diffuse = Kd*diffuseProduct;
+
+    float Ks = pow( max(dot(N, H), 0.0), shininess );
+    vec4  specular = Ks * specularProduct;
+    
+    if( dot(L, N) < 0.0 ) specular = vec4(0.0, 0.0, 0.0, 1.0);
+
+    fColor = ambient + diffuse +specular;
+    fColor.a = 1.0;
+
+    gl_FragColor = fColor*texture2D(texMap, fTexCoords); 
+}
+
+   
+</script>
+       
+<script type="text/javascript" src="../Common/webgl-utils.js"></script>
+<script type="text/javascript" src="../Common/initShaders.js"></script>
+<script type="text/javascript" src="../Common/MV.js"></script>
+<script type="text/javascript" src="../Common/ice-skates-model.js"></script>
+
+
+    
+<body>
+<canvas id="gl-canvas" width="550" height="550">
+
+</canvas>
+</body>
+</html>
